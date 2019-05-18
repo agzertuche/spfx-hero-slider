@@ -1,9 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "spfx-hero-slider-client-side-solution",
-    "id": "a7f1d50d-00b3-40aa-8657-6f8b3f64166d",
-    "version": "1.0.0.0",
+    "name": "spfx-hero-slider-client-side-solution-arturo",
+    "id": "a7f1d50d-00b3-40aa-8657-6f8b3f64186d",
+    "version": "1.0.0.1",
     "includeClientSideAssets": true,
     "isDomainIsolated": false
   },

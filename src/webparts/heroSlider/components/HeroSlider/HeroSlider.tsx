@@ -4,6 +4,7 @@ import { HeroSliderState } from './HeroSliderState';
 import { Slide, Controls, Nav } from '../../components';
 import { ComponentStatus } from '../../models/ComponentStatus';
 import styles from './HeroSlider.module.scss';
+import { Placeholder } from '@pnp/spfx-controls-react/lib/Placeholder';
 
 export default class HeroSlider extends React.Component<
   HeroSliderProps,
@@ -22,11 +23,11 @@ export default class HeroSlider extends React.Component<
   public componentDidMount(): void {
     const { slidesLimit, dataProvider, contentTypeName } = this.props;
 
-    // if (!contentTypeName) {
-    //   return this.setState({
-    //     componentStatus: ComponentStatus.MissingConfiguration,
-    //   });
-    // }
+    if (!contentTypeName) {
+      return this.setState({
+        componentStatus: ComponentStatus.MissingConfiguration,
+      });
+    }
 
     dataProvider
       .getSlides(contentTypeName)
@@ -86,20 +87,62 @@ export default class HeroSlider extends React.Component<
     });
   };
 
+  private openConfigurationPane = () => {
+    this.props.context.propertyPane.open();
+  };
+
   public render(): React.ReactElement<HeroSliderProps> {
-    const { slides, currentIndex } = this.state;
+    const { slides, currentIndex, componentStatus } = this.state;
+    const { hideControls, hideNavigation } = this.props;
+
+    if (componentStatus === ComponentStatus.Error) {
+      return (
+        <Placeholder
+          iconName="StatusErrorFull"
+          iconText="🔥 An error ocurred! 🔥"
+          description="Hurry up! and call the hacker cat 🐱‍💻 to fix the bug 🐛"
+        />
+      );
+    }
+
+    if (componentStatus === ComponentStatus.MissingConfiguration) {
+      return (
+        <Placeholder
+          iconName="Edit"
+          iconText="🚧 Web part not configured! 🚧"
+          description="Don't be lazy 😪... configure this web part now! 👇"
+          buttonLabel="Configure 🔨"
+          onConfigure={this.openConfigurationPane}
+        />
+      );
+    }
+
+    if (componentStatus === ComponentStatus.Loading) {
+      return (
+        <Placeholder
+          iconName="Sync"
+          iconText="⏳ Loading... ⏳"
+          description="Be patient the hamster is working 🐹, we hope this works 🙏"
+          hideButton
+        />
+      );
+    }
 
     return (
       <div className={styles.slider}>
-        <Controls goNext={this.nextSlide} goPrevious={this.prevSlide} />
+        {!hideControls && (
+          <Controls goNext={this.nextSlide} goPrevious={this.prevSlide} />
+        )}
         {slides.map((slide, index) => (
           <Slide key={slide.id} {...slide} isActive={currentIndex === index} />
         ))}
-        <Nav
-          navItems={slides}
-          onItemSelected={this.selectedSlide}
-          activeIndex={currentIndex}
-        />
+        {!hideNavigation && (
+          <Nav
+            navItems={slides}
+            onItemSelected={this.selectedSlide}
+            activeIndex={currentIndex}
+          />
+        )}
       </div>
     );
   }

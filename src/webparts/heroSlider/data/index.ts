@@ -1,2 +1,2 @@
 export * from './MockDataProvider';
-// export * from './RestDataProvider';
+export * from './RestDataProvider';
