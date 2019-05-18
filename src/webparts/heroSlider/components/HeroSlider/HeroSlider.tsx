@@ -51,10 +51,39 @@ export default class HeroSlider extends React.Component<
   }
 
   private nextSlide = () => {
-    console.log('nextSlide');
+    const { currentIndex, slides } = this.state;
+    const lastSlideIndex = slides.length - 1;
+
+    if (currentIndex === lastSlideIndex) {
+      return this.setState({
+        currentIndex: 0,
+      });
+    }
+
+    this.setState(prevState => ({
+      currentIndex: prevState.currentIndex + 1,
+    }));
   };
+
   private prevSlide = () => {
-    console.log('PrevSlide');
+    const { currentIndex, slides } = this.state;
+    const lastSlideIndex = slides.length - 1;
+
+    if (currentIndex === 0) {
+      return this.setState({
+        currentIndex: lastSlideIndex,
+      });
+    }
+
+    this.setState(prevState => ({
+      currentIndex: prevState.currentIndex - 1,
+    }));
+  };
+
+  private selectedSlide = (selectedIndex: number) => {
+    this.setState({
+      currentIndex: selectedIndex,
+    });
   };
 
   public render(): React.ReactElement<HeroSliderProps> {
@@ -66,7 +95,11 @@ export default class HeroSlider extends React.Component<
         {slides.map((slide, index) => (
           <Slide key={slide.id} {...slide} isActive={currentIndex === index} />
         ))}
-        <Nav />
+        <Nav
+          navItems={slides}
+          onItemSelected={this.selectedSlide}
+          activeIndex={currentIndex}
+        />
       </div>
     );
   }

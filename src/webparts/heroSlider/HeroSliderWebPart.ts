@@ -5,8 +5,14 @@ import {
   Environment,
   EnvironmentType,
 } from '@microsoft/sp-core-library';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { IPropertyPaneConfiguration } from '@microsoft/sp-property-pane';
+import {
+  BaseClientSideWebPart,
+  PropertyPaneHorizontalRule,
+} from '@microsoft/sp-webpart-base';
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneCheckbox,
+} from '@microsoft/sp-property-pane';
 
 import * as strings from 'HeroSliderWebPartStrings';
 import { HeroSlider } from './components';
@@ -63,7 +69,18 @@ export default class HeroSliderWebPart extends BaseClientSideWebPart<
           header: {
             description: strings.PropertyPaneDescription,
           },
-          groups: [],
+          groups: [
+            {
+              groupName: strings.VisibilityGroupName,
+              groupFields: [
+                PropertyPaneHorizontalRule(),
+                PropertyPaneCheckbox('hideControls', {
+                  text: strings.HideControlsFieldLabel,
+                  checked: false,
+                }),
+              ],
+            },
+          ],
         },
       ],
     };
